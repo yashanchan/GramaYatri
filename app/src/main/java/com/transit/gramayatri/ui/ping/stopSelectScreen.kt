@@ -50,6 +50,7 @@ fun stopSelectScreen(
                         stopIndex = selectedStopIndex,
                         stopName  = route.stops[selectedStopIndex]
                     )
+                    onBack()
                 }) { Text("Confirm", color = BrandOrange) }
             },
             dismissButton = {

@@ -28,6 +28,10 @@ import com.transit.gramayatri.data.model.Routes
 import com.transit.gramayatri.data.repository.busRepo
 import com.transit.gramayatri.data.repository.userRepo
 import com.transit.gramayatri.ui.theme.*
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Info
 
 @Composable
 fun pingScreen(
@@ -178,7 +182,6 @@ fun pingScreen(
                 )
             }
 
-            // Not found
             is PingUiState.NotFound -> {
                 Box(
                     modifier = Modifier.fillMaxSize().padding(32.dp),
@@ -192,31 +195,104 @@ fun pingScreen(
                 }
             }
 
-            // Success toast
             is PingUiState.Success -> {
-                Box(
-                    modifier = Modifier.fillMaxSize().padding(32.dp),
-                    contentAlignment = Alignment.Center
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(SurfaceGray)
+                        .padding(32.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
                 ) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text("✅", fontSize = 48.sp)
-                        Spacer(Modifier.height(12.dp))
-                        Text(
-                            state.message,
-                            textAlign  = TextAlign.Center,
-                            fontWeight = FontWeight.SemiBold,
-                            color      = TextPrimary
+                    // Success circle
+                    Box(
+                        modifier = Modifier
+                            .size(100.dp)
+                            .clip(CircleShape)
+                            .background(EtaPillGreen),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector        = Icons.Default.CheckCircle,
+                            contentDescription = null,
+                            tint               = EtaPillGreenText,
+                            modifier           = Modifier.size(56.dp)
                         )
-                        Spacer(Modifier.height(20.dp))
-                        Button(
-                            onClick = { vm.reset(); showStopSelect = false },
-                            colors  = ButtonDefaults.buttonColors(containerColor = BrandOrange)
-                        ) { Text("Done") }
+                    }
+
+                    Spacer(Modifier.height(24.dp))
+
+                    Text(
+                        text       = "Ping Submitted!",
+                        style      = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
+                        color      = TextPrimary,
+                        textAlign  = TextAlign.Center
+                    )
+
+                    Spacer(Modifier.height(10.dp))
+
+                    Text(
+                        text      = state.message,
+                        style     = MaterialTheme.typography.bodyMedium,
+                        color     = TextSecondary,
+                        textAlign = TextAlign.Center
+                    )
+
+                    Spacer(Modifier.height(8.dp))
+
+                    // Info box
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(EtaPillGreen, RoundedCornerShape(12.dp))
+                            .padding(14.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            Icons.Default.Info,
+                            contentDescription = null,
+                            tint     = EtaPillGreenText,
+                            modifier = Modifier.size(18.dp)
+                        )
+                        Spacer(Modifier.width(10.dp))
+                        Text(
+                            text  = "All passengers on this route have been updated with the new ETA.",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = EtaPillGreenText
+                        )
+                    }
+
+                    Spacer(Modifier.height(32.dp))
+
+                    Button(
+                        onClick = { vm.reset(); showStopSelect = false },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(52.dp),
+                        shape  = RoundedCornerShape(12.dp),
+                        colors = ButtonDefaults.buttonColors(containerColor = BrandOrange)
+                    ) {
+                        Text(
+                            "Done",
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize   = 16.sp
+                        )
+                    }
+
+                    Spacer(Modifier.height(12.dp))
+
+                    OutlinedButton(
+                        onClick = { vm.reset(); showStopSelect = false },
+                        modifier = Modifier.fillMaxWidth().height(52.dp),
+                        shape   = RoundedCornerShape(12.dp),
+                        border  = BorderStroke(1.5.dp, BrandOrange),
+                        colors  = ButtonDefaults.outlinedButtonColors(contentColor = BrandOrange)
+                    ) {
+                        Text("Report Another Bus", fontWeight = FontWeight.SemiBold, fontSize = 16.sp)
                     }
                 }
             }
-
-            // Error
             is PingUiState.Error -> {
                 Box(
                     modifier = Modifier.fillMaxSize().padding(32.dp),

@@ -48,7 +48,6 @@ fun busTimelineScreen(
     val delayBanner by vm.delayBanner.collectAsState()
     val route: busRoute? = remember(busId) { Routes.findById(busId) }
 
-    // Start listening to live pings for this bus
     LaunchedEffect(busId) {
         vm.loadTimeline(busId)
     }
@@ -116,6 +115,7 @@ fun busTimelineScreen(
                     }
                 }
             }
+
             if (stopStates.isEmpty()) {
                 item {
                     Box(
@@ -182,6 +182,8 @@ fun StopTimelineRow(stop: StopUiState) {
                 val centerX = size.width / 2
                 val dotY    = 20f
                 val dotRadius = if (isCurrent) 18f else 9f
+
+
                 if (!stop.isFirst) {
                     drawLine(
                         color       = if (stop.state == StopState.PASSED ||
